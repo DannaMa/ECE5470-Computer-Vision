@@ -1,0 +1,29 @@
+#!/usr/bin/python
+import os
+import sys
+# Example script to compile and test a c program
+#
+# syntax: ptest <image> <program> <args>
+#
+#
+#  1. the program is compiled  (creates program)
+#  2. the command is executed  (creates image.res)
+#  3. make two frame image of output and input (Creates image.com)
+#  4. display imge with vdview
+#
+image=sys.argv[1]
+pname=sys.argv[2]
+#### shift
+
+# compile the c program
+print "-- compiling c program: vcc $pname.c -o $pname"
+os.system ("vcc " + pname + ".c -o " + pname )
+
+# show the command that is being executed
+print "./" + pname + " if=" + image + " of=" + pname + ".res"
+os.system ("./" + pname + " if=" + image +  " of=" + pname + ".res")
+print "-- creating: " + pname + ".com"
+os.system ("vcat -f " + pname + ".res " + image + " of=" + pname + ".com")
+#  view the result
+print "-- starting viewer: vdview " + pname + ".com pm=0 -s &"
+os.system ("vdview " + pname + ".com pm=0 -s &" )

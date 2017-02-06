@@ -1,0 +1,31 @@
+#!/bin/sh
+pname="vtempml"
+#### this version handles command parameter parsing in sh
+#### and inserts them in $ variables in the matlab script
+eval `vshparse  if= of=  - with $0 $*`
+lib=`vxgetdir lib`
+#### the matlab script follows the next line
+matlab -nodisplay -nojvm -nodesktop -nosplash >  /dev/null << EOF
+% declare any command line parameters
+if strcmp('$OPT', '-')
+  fprintf(2, '$pname:   V4 matlab template\n')
+  fprintf(2, '[if= ] input file\n')
+  fprintf(2, '[of= ] input file\n')
+  fprintf(2, '[-v  ] visible  mode\n')
+  exit
+end
+
+addpath('$lib')
+
+im = vxread('$if');
+tm = vfembed(im,1,1,1,1);
+for i=1:size(im,1)
+   for j=1:size(im,2)
+       im(i,j)=max([tm(i+1,j+1) tm(i,j+1)  ...
+                  tm(i+2,j+1) tm(i+1,j) tm(i+1,j+2) ]);
+   end
+end
+
+vxwrite(im, '$of' )
+
+EOF

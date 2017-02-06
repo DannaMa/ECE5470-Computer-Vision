@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# script to generate the test image testim1.vx
+
+pid=$$
+vgenim s=16 -im of=tmp1.$pid hi=10
+vgenim s=16  r=4,4 hi=10 | vop -add tmp1.$pid  of=tmp2.$pid 
+vgenim s=16  r=5,5 hi=10 | vop -add tmp2.$pid  of=tmp1.$pid 
+vgenim s=16  r=6,6 hi=10 | vop -add tmp1.$pid  of=testim1.vx
+

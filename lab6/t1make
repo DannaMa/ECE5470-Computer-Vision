@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# t1make: a script to generate test images t1.vx and t1.vd
+#   also used are t1-tmp1 and  t1-tmp2
+#
+bbx=0,20,0,20,0,20
+vgen3d e=12,12,12 bb=$bbx tr=10,10,10 of=t1-tmp1
+vgen3d p=3,3,15 bb=$bbx tr=10,10,10 of=t1-tmp2
+vop -or t1-tmp1 t1-tmp2 | vdim -c -o t1.vx
+v3pol -t t1.vx -o t1.vd
+rm t1-tmp1 t1-tmp2

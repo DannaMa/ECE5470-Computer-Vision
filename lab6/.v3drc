@@ -1,0 +1,9 @@
+# v3dcf
+# Example v3d config file for grey shaded surface image display
+#
+#  Usage: v3d cf=v3dcf <poly-file>
+#
+sb off
+lm
+gray
+medium

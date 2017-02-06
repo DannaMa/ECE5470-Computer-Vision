@@ -1,0 +1,8 @@
+#!/usr/bin/python
+#
+# t2make: a script to generate grey level test images t1g.vx and t1n.vg
+#   t1g.vx has a low value of 100 and a high of 150
+#
+import os
+os.system ("vpix t1.vx lo=100 hi=150 th=1 of=t1g.vx")
+os.system ("vpix t1g.vx gn=25 of=t1n.vx")

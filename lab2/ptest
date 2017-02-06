@@ -1,0 +1,27 @@
+#!/bin/sh
+# Example script to compile and test a c program
+#
+# syntax: ptest <image> <program> <args>
+#
+#  
+#  1. the program is compiled  (creates porgram)
+#  2. the command is executed  (creates image.res)
+#  3. make two frame image of output and input (Creates image.com)
+#  4. display imge with vdview
+#
+image=$1
+pname=$2
+shift
+
+# compile the c program
+echo "-- compiling c program: vcc $pname.c -o $pname"
+vcc $pname.c -o $pname
+
+# show the command that is being executed
+echo "./$* if=$image of=$pname.res"
+eval "./$* if=$image of=$pname.res"
+echo "-- creating: $pname.com"
+vcat -f $pname.res $image of=$pname.com
+#  view the result
+echo "-- starting viewer: vdview $pname.com pm=0 -s &"
+vdview $pname.com pm=0 -s &

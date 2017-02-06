@@ -1,0 +1,44 @@
+#!/usr/bin/python
+
+#### vtemp2y  a python version of vtemp2
+
+import os
+import sys
+import subprocess
+import re
+from numpy  import *
+sys.path.append('/classes/ece547/python')
+import vx
+of=' '
+vxif=' '
+clist = vx.vxparse(sys.argv,  "if= of= -v  - ")
+exec (clist )
+
+if 'OPT' in locals():
+   print "ptemp V4 python test program"
+   print "if= input file"
+   print "of= output file"
+   print "[-v] verbose mode"
+   exit(0)
+
+if 'OPTv' in locals():
+   optv=1
+else:
+   optv=0
+
+def pixmax (x, y):
+    global im, tm
+    im[y,x] = max(tm[y+1,x+1],tm[y+1,x+2],
+                  tm[y+1,x],tm[y,x+1],tm[y+2,x+1])
+
+im = vx.vfread ( vxif )
+tm = vx.vfembed( im,1,1,1,1)    
+
+for y in range(im.shape[0] ):
+    for x in range(im.shape[1]  ):
+        pixmax(x,y)
+
+#if optv:
+#   print im
+
+vx.vfwrite(of, im)

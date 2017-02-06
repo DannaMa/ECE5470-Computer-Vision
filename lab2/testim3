@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Example sh script to generate a binary test image
+# The test image size and contents may be edited
+# then execute this script to create testim2.vx
+#
+# script to generate the test image testim1.vx
+vrawtovx -t << EOF | vfix -a of=testim3.vx
+0 0 0 0 0 0 0 0 0 0
+0 1 1 1 1 0 0 0 0 0
+0 0 0 0 1 0 0 0 0 0
+0 1 1 0 1 1 0 0 1 0
+0 1 1 0 1 1 0 0 1 0
+0 1 1 0 0 0 0 0 1 0
+0 1 1 0 0 1 1 1 1 0
+0 0 0 0 1 1 0 0 0 0
+0 0 0 1 0 0 1 1 1 0
+0 0 0 0 0 0 1 1 1 0
+EOF
