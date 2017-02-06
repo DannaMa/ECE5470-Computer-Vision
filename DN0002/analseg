@@ -1,0 +1,18 @@
+#!/bin/sh
+###    get bi image
+vchan c=1 im1 of=imgb1
+###    get ground truth img
+vlmap t1 o=dev2 of=groundtruth2 -e
+vlmap t1 o=dev3 of=groundtruth3 -e
+vlmap t1 o=dev4 of=groundtruth4 -e
+###    get rid of air
+vzero imgb of=imgb1zero
+###    equalization
+histogram imgb1zero of=imgb1histo
+###    kmean method
+vkmean if=imgb1histo of=imgbkmean
+###    separate parts
+vseparate r=42 imgbkmean of=imgbkmean42
+###    record some quantitative measures in compare.txt
+vrdiff if=imgbkmean42 bf=groundtruth2 os=compare.txt
+

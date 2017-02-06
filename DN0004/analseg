@@ -1,0 +1,37 @@
+#!/bin/sh
+###    vcc
+vcc vstooth.c -o vstooth
+vcc histogram.c -o histogram
+vcc vzero.c -o vzero
+vcc vkmean.c -o vkmean
+vcc vseparate.c -o vseparate
+vcc vpulpseparate.c -o vpulpseparate
+vcc vrestorationseparate.c -o vrestorationseparate
+###    get bi image
+vchan c=1 im1 of=imgb
+###    get ground truth img and separate single tooth
+vlmap t1 o=dev2 of=groundtruth2 -e
+vlmap t1 o=dev3 of=groundtruth3 -e
+vlmap t1 o=dev4 of=groundtruth4 -e
+vlmap t1 o=dev6 of=groundtruth6 -e
+vstooth groundtruth2 of=groundtruth2tooth
+vstooth groundtruth3 of=groundtruth3tooth
+vstooth groundtruth4 of=groundtruth4tooth
+vstooth groundtruth6 of=groundtruth6tooth
+vop if=groundtruth2tooth ig=groundtruth3tooth of=toothbodytruthparts -add
+###    equalization
+###    get rid of air
+vzero imgb of=imgbzero
+###    separate single tooth
+vstooth imgbzero of=imgbzerotooth
+###    kmean method
+vkmean if=imgbzerotooth of=imgbzerotoothkmean
+###    separate parts
+vseparate imgbzerotoothkmean of=imgbzerotoothkmeanparts
+vpulpseparate imgbzerotoothkmean of=imgbzerotoothkmeanpulp
+vrestorationseparate imgbzerotoothkmean of=imgbzerotoothkmeanrestoration
+###    record some quantitative measures in compare.txt
+vrdiff if=imgbzerotoothkmeanpulp bf=groundtruth4tooth of=comparepulpimg os=comparepulpdata -cs
+vrdiff if=imgbzerotoothkmeanrestoration bf=groundtruth6tooth of=comparerestorationimg os=comparerestorationdata -cs
+vrdiff if=imgbzerotoothkmeanparts bf=toothbodytruthparts of=comparepartsimg os=comparepartsdata -cs
+
